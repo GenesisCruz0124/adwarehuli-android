@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AdwareHuli</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title">Before you scan</string>
+    <string name="onboarding_subtitle">AdwareHuli needs a few permissions to find the app causing redirects and pop-ups. Everything stays on this phone.</string>
+    <string name="onboarding_usage_access_title">Usage Access</string>
+    <string name="onboarding_usage_access_desc">Lets AdwareHuli see which app was on screen right before the browser popped up.</string>
+    <string name="onboarding_query_packages_title">See All Installed Apps</string>
+    <string name="onboarding_query_packages_desc">Lets AdwareHuli list every app on the phone, including hidden ones.</string>
+    <string name="onboarding_notifications_title">Notifications</string>
+    <string name="onboarding_notifications_desc">Shows a status notification while the monitor is running and alerts you to redirects.</string>
+    <string name="onboarding_boot_title">Resume After Restart</string>
+    <string name="onboarding_boot_desc">Optional. Restart the monitor automatically if the phone reboots during a scan.</string>
+    <string name="status_granted">Granted</string>
+    <string name="status_not_granted">Not granted</string>
+    <string name="action_grant">Grant</string>
+    <string name="action_continue">Continue</string>
+    <string name="onboarding_blocked_notice">Usage Access and "See All Installed Apps" are required before you can scan.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Dashboard</string>
+    <string name="dashboard_monitor_on">Monitor: On</string>
+    <string name="dashboard_monitor_off">Monitor: Off</string>
+    <string name="dashboard_last_scan">Last scan: %1$s</string>
+    <string name="dashboard_last_scan_never">Last scan: never</string>
+    <string name="dashboard_confirmed_count">Confirmed culprits: %1$d</string>
+    <string name="dashboard_start_monitor">Start Monitor</string>
+    <string name="dashboard_stop_monitor">Stop Monitor</string>
+    <string name="dashboard_run_scan">Run Risk Scan</string>
+    <string name="dashboard_confirmed_section">Confirmed Culprits</string>
+    <string name="dashboard_no_confirmed">No confirmed culprits yet. Run the monitor and the risk scanner to build evidence.</string>
+    <string name="dashboard_verdict_explanation">Triggered the browser %1$dx and %2$s — likely the source of the ads.</string>
+    <string name="dashboard_reason_overlay">can draw over other apps</string>
+    <string name="dashboard_reason_accessibility">has accessibility access</string>
+    <string name="dashboard_reason_hidden">is hidden from the app list</string>
+    <string name="dashboard_reason_sideloaded">was sideloaded from an unknown source</string>
+
+    <!-- Monitor -->
+    <string name="monitor_title">Culprit Monitor</string>
+    <string name="monitor_start">Start</string>
+    <string name="monitor_stop">Stop</string>
+    <string name="monitor_status_on">Monitoring</string>
+    <string name="monitor_status_off">Not monitoring</string>
+    <string name="monitor_events_session">Events captured this session: %1$d</string>
+    <string name="monitor_leaderboard_title">Culprit Leaderboard</string>
+    <string name="monitor_leaderboard_empty">No redirects captured yet.</string>
+    <string name="monitor_history_title">Redirect History</string>
+    <string name="monitor_history_empty">No redirect events recorded yet.</string>
+    <string name="monitor_last_seen">Last seen: %1$s</string>
+    <string name="monitor_redirect_count">%1$d redirects</string>
+    <string name="monitor_notification_channel_name">Redirect Monitor</string>
+    <string name="monitor_notification_title">AdwareHuli is watching for redirects</string>
+    <string name="monitor_notification_text">Monitoring foreground app switches</string>
+    <string name="monitor_alert_channel_name">Redirect Alerts</string>
+    <string name="monitor_alert_title">Possible redirect detected</string>
+    <string name="monitor_alert_text">%1$s may have opened the browser</string>
+    <string name="monitor_resume_on_boot">Resume monitor after restart</string>
+
+    <!-- Risk Scanner -->
+    <string name="scanner_title">Risk Scanner</string>
+    <string name="scanner_scan_button">Scan Installed Apps</string>
+    <string name="scanner_scanning">Scanning…</string>
+    <string name="scanner_show_system">Show system apps</string>
+    <string name="scanner_empty">Run a scan to see ranked results.</string>
+    <string name="band_red">RED</string>
+    <string name="band_yellow">YELLOW</string>
+    <string name="band_green">GREEN</string>
+    <string name="reason_overlay">Can draw over other apps</string>
+    <string name="reason_accessibility">Accessibility-capable</string>
+    <string name="reason_hidden">Hidden app</string>
+    <string name="reason_sideloaded">Sideloaded / unknown source</string>
+    <string name="reason_recent_install">Recently installed</string>
+    <string name="reason_boot_autostart">Auto-starts on boot</string>
+    <string name="reason_ad_network_perms">Multiple ad/network permissions</string>
+
+    <!-- App Detail -->
+    <string name="detail_title">App Detail</string>
+    <string name="detail_package">Package: %1$s</string>
+    <string name="detail_version">Version: %1$s</string>
+    <string name="detail_install_source">Install source: %1$s</string>
+    <string name="detail_install_date">First installed: %1$s</string>
+    <string name="detail_unknown_source">Unknown</string>
+    <string name="detail_permissions_title">Requested Permissions</string>
+    <string name="detail_redirect_history_title">Redirect History for This App</string>
+    <string name="detail_redirect_count">Redirect events: %1$d</string>
+    <string name="detail_risk_title">Risk Assessment</string>
+    <string name="detail_uninstall">Uninstall</string>
+    <string name="detail_open_app_info">Open App Info</string>
+    <string name="detail_not_scanned">This app has not been scanned yet.</string>
+
+    <!-- Navigation -->
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_monitor">Monitor</string>
+    <string name="nav_scanner">Scanner</string>
+</resources>
