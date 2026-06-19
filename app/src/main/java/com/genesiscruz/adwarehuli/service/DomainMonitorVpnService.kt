@@ -11,6 +11,7 @@ import android.net.NetworkCapabilities
 import android.net.VpnService
 import android.os.Build
 import android.os.ParcelFileDescriptor
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.genesiscruz.adwarehuli.AdwareHuliApp
 import com.genesiscruz.adwarehuli.MainActivity
@@ -22,6 +23,7 @@ import com.genesiscruz.adwarehuli.data.net.IpV4PacketView
 import com.genesiscruz.adwarehuli.data.net.UdpReplyBuilder
 import com.genesiscruz.adwarehuli.domain.Constants
 import com.genesiscruz.adwarehuli.domain.model.DomainCategory
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -56,7 +58,14 @@ import java.net.InetSocketAddress
  */
 class DomainMonitorVpnService : VpnService() {
 
-    private val scope = CoroutineScope(SupervisorJob())
+    // A SupervisorJob alone does not stop an uncaught exception from one child
+    // coroutine (e.g. a single malformed DNS packet) from crashing the whole
+    // app process — it only stops siblings from being cancelled. This handler
+    // is what actually keeps a per-packet failure from taking down AdwareHuli.
+    private val exceptionHandler = CoroutineExceptionHandler { _, e ->
+        Log.e(TAG, "Unhandled exception in Domain Monitor coroutine", e)
+    }
+    private val scope = CoroutineScope(SupervisorJob() + exceptionHandler)
     private var captureJob: Job? = null
     private var tunFd: ParcelFileDescriptor? = null
 
@@ -136,8 +145,14 @@ class DomainMonitorVpnService : VpnService() {
         _hitsThisSession.value = 0
 
         captureJob = scope.launch {
-            blocklistMatcher.load()
-            runCaptureLoop(fd)
+            try {
+                blocklistMatcher.load()
+                runCaptureLoop(fd)
+            } catch (e: Exception) {
+                Log.e(TAG, "Domain Monitor capture loop failed", e)
+                _lastError.value = ErrorReason.ESTABLISH_FAILED
+                stopVpn()
+            }
         }
     }
 
@@ -186,7 +201,13 @@ class DomainMonitorVpnService : VpnService() {
             if (length <= 0) continue
 
             val packet = buffer.copyOf(length)
-            scope.launch { handlePacket(packet, output) }
+            scope.launch {
+                try {
+                    handlePacket(packet, output)
+                } catch (e: Exception) {
+                    Log.e(TAG, "Failed to handle a captured DNS packet", e)
+                }
+            }
         }
     }
 
@@ -306,6 +327,7 @@ class DomainMonitorVpnService : VpnService() {
         const val ACTION_START = "com.genesiscruz.adwarehuli.action.START_DOMAIN_MONITOR"
         const val ACTION_STOP = "com.genesiscruz.adwarehuli.action.STOP_DOMAIN_MONITOR"
 
+        private const val TAG = "DomainMonitorVpnService"
         private const val CHANNEL_ID = "domain_monitor_status"
         private const val NOTIFICATION_ID = 2001
         private const val UPSTREAM_TIMEOUT_MS = 5000
