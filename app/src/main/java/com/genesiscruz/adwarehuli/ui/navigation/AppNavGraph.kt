@@ -10,8 +10,6 @@ import androidx.navigation.navArgument
 import com.genesiscruz.adwarehuli.data.pm.PermissionChecker
 import com.genesiscruz.adwarehuli.ui.appdetail.AppDetailScreen
 import com.genesiscruz.adwarehuli.ui.dashboard.DashboardScreen
-import com.genesiscruz.adwarehuli.ui.domainmonitor.DomainMonitorScreen
-import com.genesiscruz.adwarehuli.ui.domainmonitor.FlaggedDomainsScreen
 import com.genesiscruz.adwarehuli.ui.monitor.MonitorScreen
 import com.genesiscruz.adwarehuli.ui.onboarding.OnboardingScreen
 import com.genesiscruz.adwarehuli.ui.scanner.ScannerScreen
@@ -32,7 +30,6 @@ fun AppNavGraph(permissionChecker: PermissionChecker, navController: NavHostCont
             DashboardScreen(
                 onRunScan = { navController.navigate(Routes.SCANNER) },
                 onOpenMonitor = { navController.navigate(Routes.MONITOR) },
-                onOpenDomainMonitor = { navController.navigate(Routes.DOMAIN_MONITOR) },
                 onOpenAppDetail = { pkg -> navController.navigate(Routes.appDetail(pkg)) }
             )
         }
@@ -41,19 +38,6 @@ fun AppNavGraph(permissionChecker: PermissionChecker, navController: NavHostCont
         }
         composable(Routes.SCANNER) {
             ScannerScreen(onOpenAppDetail = { pkg -> navController.navigate(Routes.appDetail(pkg)) })
-        }
-        composable(Routes.DOMAIN_MONITOR) {
-            DomainMonitorScreen(
-                onOpenFlaggedDomains = { navController.navigate(Routes.FLAGGED_DOMAINS) },
-                onOpenAppDetail = { pkg -> navController.navigate(Routes.appDetail(pkg)) },
-                onBack = { navController.popBackStack() }
-            )
-        }
-        composable(Routes.FLAGGED_DOMAINS) {
-            FlaggedDomainsScreen(
-                onOpenAppDetail = { pkg -> navController.navigate(Routes.appDetail(pkg)) },
-                onBack = { navController.popBackStack() }
-            )
         }
         composable(
             route = Routes.APP_DETAIL,

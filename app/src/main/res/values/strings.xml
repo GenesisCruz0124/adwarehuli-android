@@ -94,48 +94,4 @@
     <string name="nav_dashboard">Dashboard</string>
     <string name="nav_monitor">Monitor</string>
     <string name="nav_scanner">Scanner</string>
-    <string name="nav_domain_monitor">Domain Monitor</string>
-
-    <!-- Dashboard: Domain Monitor status -->
-    <string name="dashboard_domain_monitor_on">Domain Monitor: On</string>
-    <string name="dashboard_domain_monitor_off">Domain Monitor: Off</string>
-
-    <!-- Domain Monitor -->
-    <string name="domain_monitor_title">Domain Monitor</string>
-    <string name="domain_monitor_status_on">Capturing DNS lookups</string>
-    <string name="domain_monitor_status_off">Not capturing</string>
-    <string name="domain_monitor_start">Start</string>
-    <string name="domain_monitor_stop">Stop</string>
-    <string name="domain_monitor_hits_session">Lookups captured this session: %1$d</string>
-    <string name="domain_monitor_blocking_toggle">Block flagged domains</string>
-    <string name="domain_monitor_blocking_desc">When on, flagged lookups get NXDOMAIN instead of being forwarded. Off by default — monitor-only.</string>
-    <string name="domain_monitor_view_flagged">View Flagged Domains</string>
-    <string name="domain_monitor_feed_title">Live Feed</string>
-    <string name="domain_monitor_feed_empty">No DNS lookups captured yet. Start the monitor and browse normally.</string>
-    <string name="domain_monitor_error_consent_denied">VPN permission was denied. Domain Monitor needs it to inspect DNS traffic on-device — nothing leaves your phone.</string>
-    <string name="domain_monitor_error_another_vpn">Another VPN app is active. Only one VPN can run at a time on Android — disconnect it first.</string>
-    <string name="domain_monitor_error_establish_failed">Could not start the local VPN interface. Try again or restart the app.</string>
-    <string name="domain_monitor_limitations_title">What this can and can\'t see</string>
-    <string name="domain_monitor_limitations_text">Only domain names (DNS queries) are read — never page content, HTTPS payloads, or passwords. Only one VPN can be active at a time. App attribution requires Android 10+; on older versions the app is shown as unknown.</string>
-    <string name="domain_monitor_session_name">AdwareHuli Domain Monitor</string>
-    <string name="domain_monitor_notification_channel_name">Domain Monitor</string>
-    <string name="domain_monitor_notification_title">AdwareHuli is monitoring DNS lookups</string>
-    <string name="domain_monitor_notification_text">Capturing on-device only, forwarding to your normal DNS resolver</string>
-
-    <!-- Domain categories -->
-    <string name="domain_category_gambling">Gambling</string>
-    <string name="domain_category_ad_network">Ad network</string>
-    <string name="domain_category_malvertising">Malvertising</string>
-    <string name="domain_category_uncategorized">Flagged</string>
-
-    <!-- Flagged Domains -->
-    <string name="flagged_domains_title">Flagged Domains</string>
-    <string name="flagged_domains_empty">No flagged domains observed yet.</string>
-    <string name="flagged_domains_count">%1$d flagged lookups</string>
-
-    <!-- App Detail: Network activity -->
-    <string name="detail_network_activity_title">Network Activity</string>
-    <string name="detail_network_activity_empty">No domain lookups recorded for this app yet.</string>
-    <string name="detail_network_correlation_title">Domain Monitor Correlation</string>
-    <string name="detail_network_correlation_text">Looked up %1$s (%2$s) %3$.1fs before the browser opened — confirmed source of the ads.</string>
 </resources>

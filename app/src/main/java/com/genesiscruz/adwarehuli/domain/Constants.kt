@@ -63,30 +63,4 @@ object Constants {
         RiskWeights.HIDDEN_APP
     )
     const val CONFIRMED_CULPRIT_MIN_SCORE = RISK_BAND_YELLOW_THRESHOLD
-
-    // --- Domain Monitor (Phase 2 VPN) ---
-    // Loopback-only VpnService; never leaves the device.
-    const val VPN_ADDRESS = "10.7.0.2"
-    const val VPN_PREFIX_LENGTH = 32
-    const val VPN_DNS_SENTINEL = "10.7.0.1"
-    const val VPN_MTU = 1500
-
-    // Upstream resolver the protected DatagramSocket forwards real DNS queries to.
-    const val UPSTREAM_DNS_PRIMARY = "1.1.1.1"
-    const val UPSTREAM_DNS_SECONDARY = "8.8.8.8"
-    const val DNS_PORT = 53
-
-    // A DomainHit within this window before a RedirectEvent for the same
-    // package is treated as the lookup that caused the redirect.
-    const val CORRELATION_WINDOW_MS = 3000L
-
-    // Off by default: monitor-only. The user must explicitly opt in to NXDOMAIN flagged lookups.
-    const val DOMAIN_BLOCKING_DEFAULT_ENABLED = false
-
-    const val BLOCKLIST_ASSET_DIR = "blocklist"
-    val BLOCKLIST_ASSET_FILES = mapOf(
-        "GAMBLING" to "$BLOCKLIST_ASSET_DIR/gambling.txt",
-        "AD_NETWORK" to "$BLOCKLIST_ASSET_DIR/ad_networks.txt",
-        "MALVERTISING" to "$BLOCKLIST_ASSET_DIR/malvertising.txt"
-    )
 }

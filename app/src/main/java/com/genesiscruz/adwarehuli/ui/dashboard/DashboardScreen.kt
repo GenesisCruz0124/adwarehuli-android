@@ -39,7 +39,6 @@ import com.genesiscruz.adwarehuli.ui.rememberAppContainer
 fun DashboardScreen(
     onRunScan: () -> Unit,
     onOpenMonitor: () -> Unit,
-    onOpenDomainMonitor: () -> Unit,
     onOpenAppDetail: (String) -> Unit
 ) {
     val context = androidx.compose.ui.platform.LocalContext.current
@@ -50,7 +49,6 @@ fun DashboardScreen(
                 DashboardViewModel(
                     container.redirectEventRepository,
                     container.appRiskRepository,
-                    container.domainHitRepository,
                     container.computeVerdictsUseCase
                 )
             }
@@ -68,7 +66,6 @@ fun DashboardScreen(
             item {
                 StatusCard(
                     isMonitoring = state.isMonitoring,
-                    isDomainMonitoring = state.isDomainMonitoring,
                     lastScanTime = state.lastScanTime,
                     confirmedCount = state.confirmedCulprits.size
                 )
@@ -94,11 +91,6 @@ fun DashboardScreen(
                 }
             }
             item {
-                OutlinedButton(onClick = onOpenDomainMonitor, modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp)) {
-                    Text(stringResource(R.string.nav_domain_monitor))
-                }
-            }
-            item {
                 Text(stringResource(R.string.dashboard_confirmed_section), style = MaterialTheme.typography.titleLarge)
             }
             if (state.confirmedCulprits.isEmpty()) {
@@ -119,19 +111,12 @@ fun DashboardScreen(
 }
 
 @Composable
-private fun StatusCard(isMonitoring: Boolean, isDomainMonitoring: Boolean, lastScanTime: Long?, confirmedCount: Int) {
+private fun StatusCard(isMonitoring: Boolean, lastScanTime: Long?, confirmedCount: Int) {
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
                 stringResource(if (isMonitoring) R.string.dashboard_monitor_on else R.string.dashboard_monitor_off),
                 style = MaterialTheme.typography.bodyLarge
-            )
-            Text(
-                stringResource(
-                    if (isDomainMonitoring) R.string.dashboard_domain_monitor_on else R.string.dashboard_domain_monitor_off
-                ),
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(top = 4.dp)
             )
             Text(
                 if (lastScanTime != null) {

@@ -11,6 +11,5 @@ data class CulpritVerdict(
     val lastSeen: Long,
     val riskInfo: AppRiskInfo?,
     val isConfirmed: Boolean,
-    val explanation: String,
-    val domainCorrelation: DomainRedirectCorrelation? = null
+    val explanation: String
 )
