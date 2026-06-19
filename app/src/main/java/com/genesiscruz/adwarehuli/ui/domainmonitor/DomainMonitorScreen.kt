@@ -64,19 +64,34 @@ fun DomainMonitorScreen(
     val state by viewModel.state.collectAsState()
     var blockingEnabled by remember { mutableStateOf(DomainMonitorPrefs.isBlockingEnabled(context)) }
     var lastCrash by remember { mutableStateOf(CrashLog.lastCrash(context)) }
+    var lastBreadcrumbs by remember { mutableStateOf(CrashLog.lastBreadcrumbs(context)) }
 
     val consentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        CrashLog.breadcrumb(context, "consent result resultCode=${result.resultCode}")
         if (result.resultCode == android.app.Activity.RESULT_OK) {
             DomainMonitorVpnService.start(context)
+            CrashLog.breadcrumb(context, "start() called after consent OK")
         }
     }
 
     fun startMonitor() {
-        val consentIntent = DomainMonitorVpnService.prepareIntent(context)
+        CrashLog.breadcrumb(context, "Start tapped")
+        val consentIntent = try {
+            DomainMonitorVpnService.prepareIntent(context)
+        } catch (e: Exception) {
+            CrashLog.breadcrumb(context, "prepareIntent threw ${e::class.simpleName}: ${e.message}")
+            throw e
+        }
+        CrashLog.breadcrumb(
+            context,
+            "prepareIntent returned ${if (consentIntent != null) "non-null (need consent)" else "null (already consented)"}"
+        )
         if (consentIntent != null) {
             consentLauncher.launch(consentIntent)
+            CrashLog.breadcrumb(context, "consentLauncher.launch called")
         } else {
             DomainMonitorVpnService.start(context)
+            CrashLog.breadcrumb(context, "start() called directly")
         }
     }
 
@@ -112,6 +127,32 @@ fun DomainMonitorScreen(
                                 onClick = {
                                     CrashLog.clear(context)
                                     lastCrash = null
+                                },
+                                modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+                            ) { Text("Dismiss") }
+                        }
+                    }
+                }
+            }
+            lastBreadcrumbs?.let { breadcrumbs ->
+                item {
+                    Card(
+                        modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text("Last start attempt log (screenshot this for support)", style = MaterialTheme.typography.titleSmall)
+                            androidx.compose.foundation.text.selection.SelectionContainer {
+                                Text(
+                                    breadcrumbs,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    modifier = Modifier.padding(top = 8.dp)
+                                )
+                            }
+                            OutlinedButton(
+                                onClick = {
+                                    CrashLog.clearBreadcrumbs(context)
+                                    lastBreadcrumbs = null
                                 },
                                 modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
                             ) { Text("Dismiss") }

@@ -14,6 +14,7 @@ import android.os.ParcelFileDescriptor
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.genesiscruz.adwarehuli.AdwareHuliApp
+import com.genesiscruz.adwarehuli.CrashLog
 import com.genesiscruz.adwarehuli.MainActivity
 import com.genesiscruz.adwarehuli.R
 import com.genesiscruz.adwarehuli.data.net.BlocklistMatcher
@@ -77,13 +78,16 @@ class DomainMonitorVpnService : VpnService() {
 
     override fun onCreate() {
         super.onCreate()
+        CrashLog.breadcrumb(this, "Service.onCreate start")
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         blocklistMatcher = BlocklistMatcher(this)
         connectionAttributor = ConnectionAttributor(this)
         createNotificationChannel()
+        CrashLog.breadcrumb(this, "Service.onCreate done")
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        CrashLog.breadcrumb(this, "onStartCommand action=${intent?.action}")
         when (intent?.action) {
             ACTION_STOP -> {
                 stopVpn()
@@ -107,38 +111,50 @@ class DomainMonitorVpnService : VpnService() {
     }
 
     private fun startVpn() {
-        if (captureJob?.isActive == true) return
+        CrashLog.breadcrumb(this, "startVpn entered")
+        if (captureJob?.isActive == true) {
+            CrashLog.breadcrumb(this, "startVpn: already active, returning")
+            return
+        }
 
         // The system requires startForeground() to be called very shortly after
         // startForegroundService() — if we return early below without ever calling
         // it, Android kills the whole app with "did not then call
         // Service.startForeground()". So this must run first, before anything
         // that can fail or return.
+        CrashLog.breadcrumb(this, "calling startForeground")
         startForeground(NOTIFICATION_ID, buildNotification())
+        CrashLog.breadcrumb(this, "startForeground returned")
 
         if (isAnotherVpnActive()) {
+            CrashLog.breadcrumb(this, "another VPN is active")
             _lastError.value = ErrorReason.ANOTHER_VPN_ACTIVE
         }
 
+        CrashLog.breadcrumb(this, "calling buildVpnInterface")
         val fd = try {
             buildVpnInterface()
         } catch (e: SecurityException) {
+            CrashLog.breadcrumb(this, "buildVpnInterface threw SecurityException: ${e.message}")
             _lastError.value = ErrorReason.CONSENT_DENIED
             stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
             return
         } catch (e: Exception) {
+            CrashLog.breadcrumb(this, "buildVpnInterface threw ${e::class.simpleName}: ${e.message}")
             _lastError.value = ErrorReason.ESTABLISH_FAILED
             stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
             return
         }
         if (fd == null) {
+            CrashLog.breadcrumb(this, "buildVpnInterface returned null fd")
             _lastError.value = ErrorReason.ESTABLISH_FAILED
             stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
             return
         }
+        CrashLog.breadcrumb(this, "buildVpnInterface succeeded, fd established")
         tunFd = fd
         _lastError.value = null
         _isRunning.value = true
@@ -146,9 +162,12 @@ class DomainMonitorVpnService : VpnService() {
 
         captureJob = scope.launch {
             try {
+                CrashLog.breadcrumb(this@DomainMonitorVpnService, "capture coroutine: loading blocklist")
                 blocklistMatcher.load()
+                CrashLog.breadcrumb(this@DomainMonitorVpnService, "capture coroutine: starting capture loop")
                 runCaptureLoop(fd)
             } catch (e: Exception) {
+                CrashLog.breadcrumb(this@DomainMonitorVpnService, "capture coroutine failed: ${e::class.simpleName}: ${e.message}")
                 Log.e(TAG, "Domain Monitor capture loop failed", e)
                 _lastError.value = ErrorReason.ESTABLISH_FAILED
                 stopVpn()
