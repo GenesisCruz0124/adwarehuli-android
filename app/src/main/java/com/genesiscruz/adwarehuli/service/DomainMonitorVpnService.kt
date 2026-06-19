@@ -100,6 +100,13 @@ class DomainMonitorVpnService : VpnService() {
     private fun startVpn() {
         if (captureJob?.isActive == true) return
 
+        // The system requires startForeground() to be called very shortly after
+        // startForegroundService() — if we return early below without ever calling
+        // it, Android kills the whole app with "did not then call
+        // Service.startForeground()". So this must run first, before anything
+        // that can fail or return.
+        startForeground(NOTIFICATION_ID, buildNotification())
+
         if (isAnotherVpnActive()) {
             _lastError.value = ErrorReason.ANOTHER_VPN_ACTIVE
         }
@@ -108,11 +115,18 @@ class DomainMonitorVpnService : VpnService() {
             buildVpnInterface()
         } catch (e: SecurityException) {
             _lastError.value = ErrorReason.CONSENT_DENIED
+            stopForeground(STOP_FOREGROUND_REMOVE)
+            stopSelf()
+            return
+        } catch (e: Exception) {
+            _lastError.value = ErrorReason.ESTABLISH_FAILED
+            stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
             return
         }
         if (fd == null) {
             _lastError.value = ErrorReason.ESTABLISH_FAILED
+            stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
             return
         }
@@ -120,8 +134,6 @@ class DomainMonitorVpnService : VpnService() {
         _lastError.value = null
         _isRunning.value = true
         _hitsThisSession.value = 0
-
-        startForeground(NOTIFICATION_ID, buildNotification())
 
         captureJob = scope.launch {
             blocklistMatcher.load()
