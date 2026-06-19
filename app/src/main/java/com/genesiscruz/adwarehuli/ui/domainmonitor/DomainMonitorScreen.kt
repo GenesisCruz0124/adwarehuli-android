@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.genesiscruz.adwarehuli.CrashLog
 import com.genesiscruz.adwarehuli.R
 import com.genesiscruz.adwarehuli.domain.model.DomainHit
 import com.genesiscruz.adwarehuli.service.DomainMonitorPrefs
@@ -62,6 +63,7 @@ fun DomainMonitorScreen(
     )
     val state by viewModel.state.collectAsState()
     var blockingEnabled by remember { mutableStateOf(DomainMonitorPrefs.isBlockingEnabled(context)) }
+    var lastCrash by remember { mutableStateOf(CrashLog.lastCrash(context)) }
 
     val consentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == android.app.Activity.RESULT_OK) {
@@ -91,6 +93,32 @@ fun DomainMonitorScreen(
         }
     ) { padding ->
         LazyColumn(modifier = Modifier.padding(padding).fillMaxSize(), contentPadding = PaddingValues(16.dp)) {
+            lastCrash?.let { crash ->
+                item {
+                    Card(
+                        modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text("Last crash (screenshot this for support)", style = MaterialTheme.typography.titleSmall)
+                            androidx.compose.foundation.text.selection.SelectionContainer {
+                                Text(
+                                    crash,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    modifier = Modifier.padding(top = 8.dp)
+                                )
+                            }
+                            OutlinedButton(
+                                onClick = {
+                                    CrashLog.clear(context)
+                                    lastCrash = null
+                                },
+                                modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+                            ) { Text("Dismiss") }
+                        }
+                    }
+                }
+            }
             item {
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(16.dp)) {
