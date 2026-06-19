@@ -1,0 +1,28 @@
+# Ad-network domains. Not all are malicious, but heavy/unexpected lookups
+# from a non-ad app to these hosts is a useful signal.
+doubleclick.net
+googlesyndication.com
+googleadservices.com
+adservice.google.com
+applovin.com
+unityads.unity3d.com
+adcolony.com
+chartboost.com
+vungle.com
+ironsrc.com
+mopub.com
+admob.com
+inmobi.com
+mintegral.com
+startapp.com
+adsterra.com
+propellerads.com
+popads.net
+revcontent.com
+taboola.com
+outbrain.com
+criteo.com
+pubmatic.com
+rubiconproject.com
+openx.net
+smartadserver.com

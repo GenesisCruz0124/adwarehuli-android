@@ -8,6 +8,7 @@ import com.genesiscruz.adwarehuli.data.pm.LauncherDetector
 import com.genesiscruz.adwarehuli.data.pm.PackageInfoProvider
 import com.genesiscruz.adwarehuli.data.pm.PermissionChecker
 import com.genesiscruz.adwarehuli.data.repository.AppRiskRepository
+import com.genesiscruz.adwarehuli.data.repository.DomainHitRepository
 import com.genesiscruz.adwarehuli.data.repository.RedirectEventRepository
 import com.genesiscruz.adwarehuli.domain.usecase.ComputeVerdictsUseCase
 
@@ -28,6 +29,7 @@ class AppContainer(context: Context) {
 
     val redirectEventRepository by lazy { RedirectEventRepository(database.redirectEventDao()) }
     val appRiskRepository by lazy { AppRiskRepository(database.appRiskDao(), installedAppsScanner) }
+    val domainHitRepository by lazy { DomainHitRepository(database.domainHitDao()) }
 
     val computeVerdictsUseCase by lazy { ComputeVerdictsUseCase() }
 }

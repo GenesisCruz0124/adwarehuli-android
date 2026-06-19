@@ -36,8 +36,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.genesiscruz.adwarehuli.R
+import com.genesiscruz.adwarehuli.domain.model.DomainHit
+import com.genesiscruz.adwarehuli.domain.model.DomainRedirectCorrelation
 import com.genesiscruz.adwarehuli.domain.model.RedirectEvent
 import com.genesiscruz.adwarehuli.ui.components.AppIcon
+import com.genesiscruz.adwarehuli.ui.components.DomainCategoryChip
 import com.genesiscruz.adwarehuli.ui.components.RiskBandChip
 import com.genesiscruz.adwarehuli.ui.components.labelRes
 import com.genesiscruz.adwarehuli.ui.rememberAppContainer
@@ -64,7 +67,8 @@ fun AppDetailScreen(packageName: String, onBack: () -> Unit) {
                     packageName,
                     context.packageManager,
                     container.appRiskRepository,
-                    container.redirectEventRepository
+                    container.redirectEventRepository,
+                    container.domainHitRepository
                 )
             }
         }
@@ -180,6 +184,67 @@ fun AppDetailScreen(packageName: String, onBack: () -> Unit) {
                     modifier = Modifier.padding(vertical = 4.dp)
                 )
             }
+
+            item {
+                Text(
+                    stringResource(R.string.detail_network_activity_title),
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(top = 20.dp, bottom = 8.dp)
+                )
+            }
+            items(state.domainCorrelations) { correlation -> DomainCorrelationCard(correlation) }
+            if (state.domainHits.isEmpty()) {
+                item { Text(stringResource(R.string.detail_network_activity_empty), style = MaterialTheme.typography.bodyLarge) }
+            } else {
+                items(state.domainHits) { hit -> DomainHitListRow(hit) }
+            }
+        }
+    }
+}
+
+@Composable
+private fun DomainCorrelationCard(correlation: DomainRedirectCorrelation) {
+    Card(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+        colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)
+    ) {
+        Column(modifier = Modifier.padding(12.dp)) {
+            Text(stringResource(R.string.detail_network_correlation_title), style = MaterialTheme.typography.titleSmall)
+            Text(
+                stringResource(
+                    R.string.detail_network_correlation_text,
+                    correlation.domain,
+                    stringResource(correlation.category.labelRes()),
+                    correlation.gapMs / 1000f
+                ),
+                modifier = Modifier.padding(top = 4.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun DomainHitListRow(hit: DomainHit) {
+    Card(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+        colors = if (hit.isFlagged) {
+            androidx.compose.material3.CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)
+        } else {
+            androidx.compose.material3.CardDefaults.cardColors()
+        }
+    ) {
+        Row(
+            modifier = Modifier.padding(12.dp).fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(hit.domain, style = MaterialTheme.typography.bodyLarge)
+                Text(
+                    DateFormat.getDateTimeInstance().format(Date(hit.timestamp)),
+                    style = MaterialTheme.typography.labelLarge
+                )
+            }
+            DomainCategoryChip(hit.category, hit.isFlagged)
         }
     }
 }

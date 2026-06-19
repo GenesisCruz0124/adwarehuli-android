@@ -12,7 +12,11 @@
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Needed for the protected DatagramSocket the Domain Monitor uses to forward DNS queries -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- Optional, off by default; user toggles resume-after-reboot in Settings -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -42,6 +46,20 @@
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
+
+        <service
+            android:name=".service.DomainMonitorVpnService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_VPN_SERVICE"
+            android:foregroundServiceType="specialUse">
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Local on-device DNS monitoring for ad/redirect source attribution" />
+        </service>
 
         <receiver
             android:name=".service.BootCompletedReceiver"
