@@ -3,6 +3,7 @@ package com.genesiscruz.adwarehuli.ui.navigation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.BatteryAlert
 import androidx.compose.material.icons.filled.Dashboard
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Shield
@@ -27,7 +28,8 @@ private data class BottomTab(val route: String, val labelRes: Int, val icon: and
 private val bottomTabs = listOf(
     BottomTab(Routes.DASHBOARD, R.string.nav_dashboard, Icons.Filled.Dashboard),
     BottomTab(Routes.MONITOR, R.string.nav_monitor, Icons.Filled.Shield),
-    BottomTab(Routes.SCANNER, R.string.nav_scanner, Icons.Filled.Search)
+    BottomTab(Routes.SCANNER, R.string.nav_scanner, Icons.Filled.Search),
+    BottomTab(Routes.BATTERY, R.string.nav_battery, Icons.Filled.BatteryAlert)
 )
 
 @Composable

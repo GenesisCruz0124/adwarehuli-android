@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.genesiscruz.adwarehuli.data.pm.PermissionChecker
 import com.genesiscruz.adwarehuli.ui.appdetail.AppDetailScreen
+import com.genesiscruz.adwarehuli.ui.battery.BatteryScreen
 import com.genesiscruz.adwarehuli.ui.dashboard.DashboardScreen
 import com.genesiscruz.adwarehuli.ui.monitor.MonitorScreen
 import com.genesiscruz.adwarehuli.ui.onboarding.OnboardingScreen
@@ -38,6 +39,9 @@ fun AppNavGraph(permissionChecker: PermissionChecker, navController: NavHostCont
         }
         composable(Routes.SCANNER) {
             ScannerScreen(onOpenAppDetail = { pkg -> navController.navigate(Routes.appDetail(pkg)) })
+        }
+        composable(Routes.BATTERY) {
+            BatteryScreen(onOpenAppDetail = { pkg -> navController.navigate(Routes.appDetail(pkg)) })
         }
         composable(
             route = Routes.APP_DETAIL,

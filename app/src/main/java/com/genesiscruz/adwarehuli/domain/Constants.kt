@@ -54,6 +54,20 @@ object Constants {
     const val RISK_BAND_RED_THRESHOLD = 55
     const val RISK_BAND_YELLOW_THRESHOLD = 25
 
+    // --- Battery Usage ---
+    const val BATTERY_USAGE_WINDOW_DAYS = 1
+
+    object BatteryImpactWeights {
+        const val HIGH_FOREGROUND_TIME = 40
+        const val NOT_OPTIMIZED = 30
+        const val BOOT_AUTOSTART = 20
+    }
+
+    // Foreground time over the usage window above which an app is considered heavy.
+    const val BATTERY_HIGH_FOREGROUND_MINUTES = 60L
+    const val BATTERY_BAND_HIGH_THRESHOLD = 50
+    const val BATTERY_BAND_MEDIUM_THRESHOLD = 20
+
     // --- Combined Verdict ---
     const val CONFIRMED_CULPRIT_MIN_REDIRECTS = 1
     // An app needs at least one of these "high" signals plus a redirect to be confirmed.

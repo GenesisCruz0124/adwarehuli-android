@@ -39,6 +39,24 @@ Each app is scored and bucketed into a **GREEN / YELLOW / RED** risk band.
 All weights and thresholds live in a single `Constants.kt` file so they can
 be tuned without touching the scoring logic.
 
+### 3. Battery Usage
+
+A one-tap scan ranks installed apps by estimated battery impact. Real
+per-app battery consumption (mAh) requires the privileged
+`android.permission.BATTERY_STATS`, which Android reserves for
+system/signature apps — third-party apps like this one can't read it. So
+this is a heuristic estimate built from data the app *is* allowed to read:
+
+- Foreground time over the last 24h (`UsageStatsManager`)
+- Whether the app is exempt from battery optimization (`PowerManager`)
+- Auto-starts on boot
+
+Each app gets a **HIGH / MEDIUM / LOW** battery-impact band. Tapping an app
+offers shortcuts into the system's App Settings or Battery Settings screens
+— Android does not let one third-party app force-stop another, so
+"optimizing" an app means handing the user to the right system screen
+rather than claiming to kill its process outright.
+
 ### Combined verdict
 
 An app is marked a **Confirmed Culprit** when it has a meaningful number of
@@ -78,6 +96,8 @@ of crashing.
   events.
 - **Scanner tab** — run a risk scan of all installed apps, ranked by risk
   band, with a toggle to include/exclude system apps.
+- **Battery tab** — run a battery-impact scan, ranked by estimated impact
+  band, with shortcuts to each app's system settings.
 - **App Detail** (tap any app) — full picture: label, icon, package,
   version, install source/date, the complete permission list (risky ones
   highlighted), redirect history, risk band with reasons, and one-tap

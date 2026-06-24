@@ -2,12 +2,14 @@ package com.genesiscruz.adwarehuli
 
 import android.content.Context
 import com.genesiscruz.adwarehuli.data.db.AppDatabase
+import com.genesiscruz.adwarehuli.data.pm.BatteryUsageScanner
 import com.genesiscruz.adwarehuli.data.pm.BrowserDetector
 import com.genesiscruz.adwarehuli.data.pm.InstalledAppsScanner
 import com.genesiscruz.adwarehuli.data.pm.LauncherDetector
 import com.genesiscruz.adwarehuli.data.pm.PackageInfoProvider
 import com.genesiscruz.adwarehuli.data.pm.PermissionChecker
 import com.genesiscruz.adwarehuli.data.repository.AppRiskRepository
+import com.genesiscruz.adwarehuli.data.repository.BatteryUsageRepository
 import com.genesiscruz.adwarehuli.data.repository.RedirectEventRepository
 import com.genesiscruz.adwarehuli.domain.usecase.ComputeVerdictsUseCase
 
@@ -25,9 +27,11 @@ class AppContainer(context: Context) {
     val browserDetector by lazy { BrowserDetector(appContext) }
     val launcherDetector by lazy { LauncherDetector(appContext) }
     private val installedAppsScanner by lazy { InstalledAppsScanner(appContext) }
+    private val batteryUsageScanner by lazy { BatteryUsageScanner(appContext) }
 
     val redirectEventRepository by lazy { RedirectEventRepository(database.redirectEventDao()) }
     val appRiskRepository by lazy { AppRiskRepository(database.appRiskDao(), installedAppsScanner) }
+    val batteryUsageRepository by lazy { BatteryUsageRepository(batteryUsageScanner) }
 
     val computeVerdictsUseCase by lazy { ComputeVerdictsUseCase() }
 }

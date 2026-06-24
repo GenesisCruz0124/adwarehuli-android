@@ -75,6 +75,21 @@
     <string name="reason_boot_autostart">Auto-starts on boot</string>
     <string name="reason_ad_network_perms">Multiple ad/network permissions</string>
 
+    <!-- Battery Usage -->
+    <string name="battery_title">Battery Usage</string>
+    <string name="battery_scan_button">Scan Battery Usage</string>
+    <string name="battery_scanning">Scanning…</string>
+    <string name="battery_empty">Run a scan to see which apps are heaviest on battery.</string>
+    <string name="battery_band_high">HIGH</string>
+    <string name="battery_band_medium">MEDIUM</string>
+    <string name="battery_band_low">LOW</string>
+    <string name="battery_foreground_time">%1$d min on screen today</string>
+    <string name="battery_reason_foreground_time">Heavy foreground usage</string>
+    <string name="battery_reason_not_optimized">Not battery-optimized</string>
+    <string name="battery_reason_autostart">Auto-starts on boot</string>
+    <string name="battery_action_app_settings">App Settings</string>
+    <string name="battery_action_battery_settings">Battery Settings</string>
+
     <!-- App Detail -->
     <string name="detail_title">App Detail</string>
     <string name="detail_package">Package: %1$s</string>
@@ -94,4 +109,5 @@
     <string name="nav_dashboard">Dashboard</string>
     <string name="nav_monitor">Monitor</string>
     <string name="nav_scanner">Scanner</string>
+    <string name="nav_battery">Battery</string>
 </resources>
