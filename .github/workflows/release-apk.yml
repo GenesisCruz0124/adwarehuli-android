@@ -32,4 +32,4 @@ jobs:
           name: Latest build
           body: Automatically built from ${{ github.sha }} on branch ${{ github.ref_name }}.
           make_latest: true
-          files: app/build/outputs/apk/debug/app-debug.apk
+          files: app/build/outputs/apk/debug/*.apk
