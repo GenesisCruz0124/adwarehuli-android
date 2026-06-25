@@ -19,6 +19,7 @@ data class BatteryUiState(
     val visibleApps: List<AppBatteryInfo>
         get() = allApps
             .filter { showSystemApps || !it.isSystemApp }
+            .filter { it.foregroundTimeMs > 0L }
             .sortedByDescending { it.impactScore }
 }
 
